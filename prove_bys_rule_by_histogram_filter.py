@@ -1,26 +1,25 @@
-# 使用一维粒子直方图滤波算法证明贝叶斯概率必须融合先验概率p(x)，且必须使用运动模型更新先验
-# 直方图滤波首先要离散化状态空间，
-# 然后代入状态转移方程，更新先验概率
-# 最后再使用量测模型更新概率
+# 使用一维直方图滤波算法证明贝叶斯概率必须融合先验概率p(x)，且必须使用运动模型更新当前状态、先验概率，
+# 直方图滤波首先要离散化状态空间，然后代入状态转移方程，更新状态和先验概率，
+# 最后再使用量测模型更新后验概率。
 # 和粒子滤波的不一样在于，直方图滤波需要已知机器人的整个状态空间取值，如一维机器人位置可以离散化出来，
-# 如下粒子的机器人在一维空间运动的定位精度为0.1m
-# 但是粒子滤波适用于机器人状态空间未知，且无法穷举尽
+# 如下例子，机器人在一维空间运动，其状态被均匀离散为0.1m区间的小块，亦即定位精度为0.1m。
+# 但是粒子滤波适用于机器人状态空间未知，且无法穷举尽等场景
 import numpy as np
 from matplotlib import pyplot as plt
 
 door_pos = [1.0, 2.0, 5.0]
 corridor_length = 4.8
-# 0.1m划分一个区间
-histgram_interval = 0.1 # localization accurancy
+# an interval is 0.1m which means the localization accurancy is 0.1m
+histgram_interval = 0.1
 interval_num = corridor_length / histgram_interval
 motion_step = 0.1
-# 从0.5m处开始走
+# robot go from 0.5m
 true_state = 0.5
 
 interval_weight = [1.0]
 interval_pos = [0.0]
 
-# 假设机器人只能观测到距离其最近且位于其前面的门
+# assume that the robot can only observe the nearest door in front of it.
 def find_min_positive_value(obvs:list) -> float:
     min_positive = -1.0
     for obv in obvs:
@@ -31,7 +30,7 @@ def find_min_positive_value(obvs:list) -> float:
         if obvs[i] > 0 and obvs[i] < min_positive:
             min_positive = obvs[i]
     
-    # the robot can only see the door in front of it
+    # because the robot can only see the door in front of it
     if min_positive < 0:
         return 1e20
     return min_positive
@@ -46,35 +45,35 @@ interval_weight = np.array(interval_weight)
 while true_state < corridor_length:
     # update current true state
     true_state += motion_step
+    # the sensor output
+    obvs = np.array(door_pos) - true_state
+    obv_min_positive_dist = find_min_positive_value(obvs)
+    print("true min_positive_dist: ", obv_min_positive_dist)
 
-    # prediction base on motion model
-    # the weight should move with the robot
-    # 预测模型的使用至关重要，必须依据当前的 p(x)来递推
-    # interval_weight = np.roll(interval_weight, 1)
+    # prediction progress:
+	# we should first update the robot state based on the motion model
     interval_obv = []
     for i in range(len(interval_pos)):
         interval_pos[i] += motion_step
         obvs = np.array(door_pos) - interval_pos[i]
-        ## 当前位置观测到其距离其最近门的距离
+        ## the distance between the nearest door in front of the robot and the robot
         min_positive_dist = find_min_positive_value(obvs)
         interval_obv.append(min_positive_dist)
     interval_obv = np.array(interval_obv) + 1e-5
 
-    # 机器人只能观测到它前面距离其最近的一个door
-    obvs = np.array(door_pos) - true_state
-    min_positive_dist = find_min_positive_value(obvs)
-    print("true min_positive_dist: ", min_positive_dist)
 
-    # ok, now we have the measurement,
+    # ok, now we have updated the robotic state and possess the current measurement,
     # it's time to update the weight of histogram intervals
-    diff = abs(interval_obv - min_positive_dist)
+    diff = abs(interval_obv - obv_min_positive_dist)
     obv_weights = 1.0 / diff
-
-    # use bayes rule，p(x|y) ∝ p(x) * p(y|x)
+    # use bayes rule，p(x|z) ∝ p(x) * p(z|x)
+	# for that: p(x|y) = p(x) * p(y|x) / p(y) ==>
+	# p(x) ∝ p(x|y)
     interval_weight *= obv_weights
     # no use bayes rule, p(x|y) = p(y|x), ERROR!!!
     # interval_weight = obv_weights
-    # normalize weight
+    
+	# normalize weight
     interval_weight = interval_weight / np.sum(interval_weight)
 
     plt.plot(interval_pos, interval_weight)
@@ -85,4 +84,3 @@ while true_state < corridor_length:
     plt.title("pos and weight")
     plt.show()
     plt.close()
-
