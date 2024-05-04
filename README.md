@@ -1,9 +1,8 @@
 Example:
 
-![image](https://github.com/JinXiangLai/Histogram-and-Binary-Bayes-Filter/assets/62703436/f22fe11b-1d81-4d79-9ce8-c1f9f2c97f94)
+![image](https://github.com/JinXiangLai/Histogram-and-Binary-Bayes-Filter/assets/62703436/f2bae60f-1050-4022-9876-25e435ef9579)
 
-
-![image](https://github.com/JinXiangLai/Histogram-and-Binary-Bayes-Filter/assets/62703436/bd044d14-1f30-4887-bdff-bba832a139f2)
+![image](https://github.com/JinXiangLai/Histogram-and-Binary-Bayes-Filter/assets/62703436/45ed09ff-7957-4b15-996e-c55a40b7baea)
 
 
 step1:
