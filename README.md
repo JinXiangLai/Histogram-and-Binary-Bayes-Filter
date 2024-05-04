@@ -1,6 +1,7 @@
 Example:
 
-![image](https://github.com/JinXiangLai/Histogram-and-Binary-Bayes-Filter/assets/62703436/f2bae60f-1050-4022-9876-25e435ef9579)
+![image](https://github.com/JinXiangLai/Histogram-and-Binary-Bayes-Filter/assets/62703436/53302d88-513a-40c1-8b05-3e510191b99c)
+
 
 ![image](https://github.com/JinXiangLai/Histogram-and-Binary-Bayes-Filter/assets/62703436/45ed09ff-7957-4b15-996e-c55a40b7baea)
 
