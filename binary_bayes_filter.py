@@ -5,14 +5,16 @@
 # l(x) = log(p(x)/(1-p(x)))
 # bel(x_t) = 1 - 1/(1+exp(l_t)) 
 # 作为一种非参数滤波器，其与KF的区别在于，不需要假设噪声服从高斯分布，不需要线性化状态转移、测量函数
-# p(x|z_0~z_t) = p(z_t|x, z0~z_t-1) * p(x|z0~z_t-1) / p(z_t|z0~z_t-1)
+# p(x|z_0~z_t) = p(z_t|x, z0~z_t-1) * p(x|z0~z_t-1) / p(z_t|z0~z_t-1) ==>
+#              = p(z_t|x) * p(x|z0~z_t-1) / p(z_t|z0~z_t-1)
 
 from math import log, exp
 from numpy import random
-# 观测到门的状态
+# the observation probablity
 door_open = 0.8
 door_close = 0.8
-# 处理每个传感器测量时，状态x的先验分布估计，这一般是无法预知的
+# 处理每个传感器测量时，状态x的先验分布估计，这一般是无法预知的，
+# 只有在处理第0个测量时可以给出
 l_0 = log(door_open / (1-door_open))
 l_t = l_0
 obv_time = 10
