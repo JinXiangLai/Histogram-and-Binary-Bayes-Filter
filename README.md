@@ -16,10 +16,6 @@ step2:
 
 step3:
 
-![image](https://github.com/JinXiangLai/Histogram-and-Binary-Bayes-Filter/assets/62703436/830632c8-d7be-4569-923b-2d8de0699979)
-
-step4:
-
 ![image](https://github.com/JinXiangLai/Histogram-and-Binary-Bayes-Filter/assets/62703436/01a26364-f668-4496-a15c-79094374a008)
 
 
