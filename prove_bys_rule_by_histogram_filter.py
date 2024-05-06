@@ -69,6 +69,7 @@ while true_state < corridor_length:
     # use bayes rule，p(x|z) ∝ p(x) * p(z|x)
 	# for that: p(x|y) = p(x) * p(y|x) / p(y) ==>
 	# p(x) ∝ p(x|y)
+    # 观测的条件独立性
     interval_weight *= obv_weights
     # no use bayes rule, p(x|y) = p(y|x), ERROR!!!
     # interval_weight = obv_weights
